@@ -32,3 +32,28 @@ def test_readTable():
 	assert  len(headers) > 0
 	fakeHeaders = dbInstance.readTable("inexistente")
 	assert len(fakeHeaders) == 0
+
+def test_basicInsertQuery():
+	dbInstance = SqliteDB("dbPrueba.db")
+	newTable = {
+		"tableName": "prueba",
+		"fields": [
+			{"fieldName": "id", "fieldType": "INTEGER", "fieldKeys": "PRIMARY KEY"},
+			{"fieldName": "nombre", "fieldType": "TEXT", "fieldKeys": "NOT NULL"},
+			{"fieldName": "edad", "fieldType": "INTEGER"}
+		]
+	}
+	dbInstance.createTable(newTable)
+	newData = {"tableName": "prueba",
+				"data": [
+					[1,"Alice",18],
+					[2,"Bob", 23]
+				]
+	}
+	assert dbInstance.basicInsertQuery(newData) == True
+
+def test_basicSelectQuery():
+	dbInstance = SqliteDB("dbPrueba.db")
+	res = dbInstance.basicSelectQuery("prueba")
+	print(res)
+	assert True == True

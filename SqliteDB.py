@@ -175,3 +175,63 @@ class SqliteDB:
 			table_structure.append(column_dict)
 		print(table_structure)
 		return table_structure
+	def basicSelectQuery(self, tableName:str) -> list:
+		"""
+		Executes a basic SQL SELECT query to retrieve all rows from the specified table.
+
+		This method constructs a SQL query to select all records from the table provided in the `tableName` parameter.
+		It executes this query using the database cursor and returns all fetched rows.
+
+		Args:
+			tableName (str): The name of the database table from which to fetch all rows.
+
+		Returns:
+			list: A list of tuples, where each tuple represents a row in the specified table.
+
+		Usage Example:
+			>>> db_instance = SqliteDB('example.db')
+			>>> db_instance.basicSelectQuery('users')
+			[(1, 'Alice', 30), (2, 'Bob', 25)]
+		"""
+		query = f"SELECT * from {tableName}"
+		res = self.cursor.execute(query)
+		return res.fetchall()
+	def basicInsertQuery(self, params:dict) -> bool:
+		"""
+		Inserts multiple rows into a specified table in the SQLite database based on provided parameters.
+
+		This method constructs and executes a series of SQL INSERT statements to add new rows into the table specified in the `params` dictionary. Each row's data should be provided as a list of values which will be directly placed into the SQL statement.
+
+		Args:
+			params (dict): A dictionary containing parameters for the insert operation. Must include:
+				'tableName' (str): The name of the table into which the data will be inserted.
+				'data' (list of lists): A list where each sublist represents a single row of data as values.
+
+		Returns:
+			bool: True if all rows are inserted successfully, False otherwise.
+
+		Raises:
+			Exception: Prints exception details to standard output if an insert operation fails.
+
+		Usage Example:
+			>>> db_instance = SqliteDB('example.db')
+			>>> params = {
+				'tableName': 'users',
+				'data': [
+					['Alice', 30],
+					['Bob', 25]
+				]
+			}
+			>>> db_instance.basicInsertQuery(params)
+			True
+		"""
+		try:
+			for row in params['data']:
+				values = ', '.join([f"'{value}'" if isinstance(value, str) else str(value) for value in row])
+				sql = f"INSERT INTO {params['tableName']} VALUES({values})"
+				self.cursor.execute(sql)
+				self.connection.commit()
+			return True
+		except Exception as e:
+			print(e)
+			return False
