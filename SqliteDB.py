@@ -175,4 +175,3 @@ class SqliteDB:
 			table_structure.append(column_dict)
 		print(table_structure)
 		return table_structure
-

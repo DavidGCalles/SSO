@@ -1,4 +1,4 @@
-from SSO import SqliteDB
+from SqliteDB import SqliteDB
 
 def test_createTable():
 	dbInstance = SqliteDB("dbPrueba.db")
