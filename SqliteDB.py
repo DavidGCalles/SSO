@@ -175,6 +175,13 @@ class SqliteDB:
 			table_structure.append(column_dict)
 		print(table_structure)
 		return table_structure
+	def executeQuery(self, query:str):
+		try:
+			self.cursor.execute(query)
+			return True
+		except Exception as e:
+			print(e)
+			return False
 	def basicSelectQuery(self, tableName:str) -> list:
 		"""
 		Executes a basic SQL SELECT query to retrieve all rows from the specified table.
